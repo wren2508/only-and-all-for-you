@@ -1,0 +1,407 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Just Because ♡</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background:
+                radial-gradient(ellipse at 20% 20%, #ffffffb0, transparent 50%),
+                linear-gradient(180deg, #dceafa, #edf4fc, #d9e8f8);
+            font-family: Georgia, serif;
+            color: #536d8b;
+            overflow-x: hidden;
+        }
+
+        .intro {
+            width: 100%;
+            min-height: 100vh;
+            padding: 45px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 22px;
+            text-align: center;
+        }
+
+        h1 {
+            font-family: 'Parisienne', cursive;
+            font-size: clamp(3.5rem, 9vw, 6rem);
+            font-weight: normal;
+            color: #536d8b;
+            margin: 0;
+            animation: fadeIn 2s ease both;
+        }
+
+        .memory {
+            display: block;
+            width: min(360px, 85vw);
+            height: 340px;
+            object-fit: contain;
+            object-position: center;
+            border: none;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+            opacity: 0;
+            animation: pictureAppear 2s ease 1s forwards;
+        }
+
+        .caption {
+            max-width: 90%;
+            color: #6c829d;
+            font-size: 14px;
+            letter-spacing: 1.5px;
+            line-height: 1.8;
+            margin: 0;
+            opacity: 0;
+            animation: fadeIn 2s ease 1.8s forwards;
+        }
+
+        .letter-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            opacity: 0;
+            animation: slideUp 1.5s ease 2.5s forwards;
+        }
+
+        .envelope {
+            position: relative;
+            width: 105px;
+            height: 70px;
+            background: #f7f8fc;
+            border: 1px solid #c1d0e2;
+            border-radius: 3px;
+            box-shadow: 0 7px 20px #8298b51c;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .envelope:hover {
+            transform: translateY(-4px);
+        }
+
+        .envelope::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: #e5edf8;
+            clip-path: polygon(0 0, 50% 55%, 100% 0);
+            border-radius: 3px;
+            z-index: 2;
+        }
+
+        .envelope::after {
+            content: "♡";
+            position: absolute;
+            top: 28px;
+            left: 42px;
+            color: #829bb9;
+            font-size: 20px;
+            z-index: 3;
+        }
+
+        .open-button,
+        .next-button {
+            border: 1px solid #a9bed7;
+            background: #ffffffa8;
+            color: #536d8b;
+            padding: 11px 23px;
+            border-radius: 25px;
+            font-family: Georgia, serif;
+            font-size: 13px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .open-button:hover,
+        .next-button:hover {
+            background: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .letter-content {
+            display: none;
+            width: min(600px, 100%);
+            padding: 25px 0;
+            animation: fadeIn 1s ease both;
+        }
+
+        .letter-content.show {
+            display: block;
+        }
+
+        .letter-content h2 {
+            font-family: 'Parisienne', cursive;
+            font-size: 3rem;
+            font-weight: normal;
+            margin: 0 0 8px;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #829bb9;
+            line-height: 1.8;
+            margin: 0 auto 20px;
+            max-width: 350px;
+        }
+
+        .reason-count {
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: #829bb9;
+            margin-bottom: 15px;
+        }
+
+        .reasons-list {
+            max-height: 55vh;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            padding: 10px 18px;
+            margin: 0 auto 22px;
+            text-align: left;
+            background: #ffffff70;
+            border: 1px solid #d1dfef;
+            border-radius: 15px;
+            scrollbar-color: #a9bed7 #edf4fc;
+            scrollbar-width: thin;
+        }
+
+        .reason-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            color: #536d8b;
+            font-size: 14px;
+            line-height: 1.8;
+            padding: 10px 0;
+            margin: 0;
+            border-bottom: 1px solid #dce7f3;
+            text-align: left;
+        }
+
+        .reason-item:last-child {
+            border-bottom: none;
+        }
+
+        .reason-number {
+            flex-shrink: 0;
+            min-width: 27px;
+            color: #91a9c5;
+            font-size: 11px;
+            padding-top: 3px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .footer {
+            color: #829bb9;
+            font-family: 'Parisienne', cursive;
+            font-size: 1.8rem;
+            margin-top: 18px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pictureAppear {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .intro {
+                padding: 30px 16px;
+                gap: 18px;
+            }
+
+            .memory {
+                height: 280px;
+            }
+
+            .reasons-list {
+                padding: 8px 12px;
+            }
+
+            .reason-item {
+                font-size: 13px;
+                gap: 9px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-delay: 0ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="intro">
+        <h1>Just Because</h1>
+
+        <img
+            class="memory"
+            src="us.jpg"
+            alt="A special memory"
+        >
+
+        <p class="caption">
+            i hope you know how much you mean to me ♡
+        </p>
+
+        <section class="letter-area" id="letterArea">
+            <div
+                class="envelope"
+                id="envelope"
+                role="button"
+                tabindex="0"
+                aria-label="Open the letter"
+            ></div>
+
+            <button class="open-button" id="openButton">
+                click to open ♡
+            </button>
+        </section>
+
+        <section class="letter-content" id="letterContent">
+            <h2>for you ♡</h2>
+
+            <p class="subtitle">
+                300 little reasons, and still so much more left unsaid.
+            </p>
+
+            <div class="reason-count" id="reasonCount">
+                YOUR REASONS ARE READY ♡
+            </div>
+
+            <div class="reasons-list" id="reasonsList"></div>
+
+            <p class="footer">always, just because ♡</p>
+        </section>
+    </main>
+
+    <!-- Load the reasons file ONCE, before the main website script. -->
+    <script src="./reasons.js"></script>
+
+    <script>
+        const letterArea = document.getElementById("letterArea");
+        const letterContent = document.getElementById("letterContent");
+        const openButton = document.getElementById("openButton");
+        const envelope = document.getElementById("envelope");
+        const reasonsList = document.getElementById("reasonsList");
+        const reasonCount = document.getElementById("reasonCount");
+
+        function openLetter() {
+            letterArea.classList.add("hidden");
+            letterContent.classList.add("show");
+
+            if (reasonsList.children.length > 0) {
+                return;
+            }
+
+            // Check safely in case the file did not load correctly.
+            if (typeof reasons === "undefined") {
+                reasonCount.textContent = "WE COULDN'T FIND YOUR REASONS ♡";
+                reasonsList.textContent =
+                    "Please make sure reasons.js is in the same folder as index.html and contains your reasons.";
+                return;
+            }
+
+            if (!Array.isArray(reasons) || reasons.length === 0) {
+                reasonCount.textContent = "YOUR REASONS COULDN'T LOAD";
+                reasonsList.textContent =
+                    "The reasons file was found, but its contents need to be checked.";
+                return;
+            }
+
+            reasonCount.textContent =
+                reasons.length + " REASONS JUST FOR YOU ♡";
+
+            const fragment = document.createDocumentFragment();
+
+            reasons.forEach((text, index) => {
+                const item = document.createElement("p");
+                item.className = "reason-item";
+
+                const number = document.createElement("span");
+                number.className = "reason-number";
+                number.textContent = String(index + 1).padStart(3, "0");
+
+                const message = document.createElement("span");
+                message.textContent = text;
+
+                item.appendChild(number);
+                item.appendChild(message);
+                fragment.appendChild(item);
+            });
+
+            reasonsList.appendChild(fragment);
+        }
+
+        openButton.addEventListener("click", openLetter);
+        envelope.addEventListener("click", openLetter);
+
+        envelope.addEventListener("keydown", function(event) {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                openLetter();
+            }
+        });
+    </script>
+</body>
+</html>
